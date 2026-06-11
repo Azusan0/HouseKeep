@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.cskaoyan.duolai.clean.mvc.config.FilterConfiguration, \
+  com.cskaoyan.duolai.clean.mvc.config.JsonConfig, \
+  com.cskaoyan.duolai.clean.mvc.config.MvcConfig, \
+com.cskaoyan.duolai.clean.mvc.config.AutoConfiguration

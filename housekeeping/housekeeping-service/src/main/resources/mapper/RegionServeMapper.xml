@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.duolai.clean.housekeeping.dao.mapper.RegionServeMapper">
+
+    <select id="queryRegionServeListByRegionId" resultType="com.cskaoyan.duolai.clean.housekeeping.dao.entity.RegionServeDO">
+        SELECT
+            region_serve.id,
+            region_serve.sale_status,
+            region_serve.serve_item_id,
+            item.name AS serve_item_name,
+            item.serve_type_id,
+            region_serve.region_id,
+            item.reference_price,
+            region_serve.price,
+            region_serve.is_hot,
+            region_serve.create_time,
+            region_serve.update_time,
+            type.name AS serve_type_name
+        FROM
+            region_serve
+                inner JOIN serve_item AS item ON region_serve.serve_item_id = item.id
+                inner JOIN serve_type AS type ON item.serve_type_id = type.id
+        WHERE
+            region_serve.region_id = #{regionId}
+    </select>
+
+    <select id="findHotServeListByRegionId" resultType="com.cskaoyan.duolai.clean.housekeeping.dao.entity.RegionServeDetailDO">
+        SELECT
+            region_serve.id,
+            region_serve.serve_item_id,
+            region_serve.price,
+            region_serve.city_code,
+            item.name AS serve_item_name,
+            item.img AS serve_item_img,
+            item.detail_img,
+            item.unit
+        FROM
+            region_serve
+                inner JOIN serve_item AS item ON region_serve.serve_item_id = item.id
+        WHERE
+            region_serve.is_hot = 1
+          AND region_serve.sale_status = 2
+          AND region_serve.region_id = #{regionId}
+    </select>
+
+    <select id="findServeTypeListByRegionId" resultType="com.cskaoyan.duolai.clean.housekeeping.dao.entity.ServeTypeDO">
+        SELECT
+            type.id,
+            type.name,
+            type.img
+        FROM
+            region_serve
+                inner JOIN serve_item AS item ON region_serve.serve_item_id = item.id
+                inner JOIN serve_type AS type ON type.id = item.serve_type_id
+        WHERE
+            region_serve.region_id = #{regionId}
+          AND region_serve.sale_status = 2
+        GROUP BY
+            type.id
+        ORDER BY
+            type.sort_num ASC
+    </select>
+
+    <select id="findServeIconCategoryByRegionId" resultMap="ServeCategoryMap">
+        SELECT
+            type.id as serve_type_id,
+            type.name as serve_type_name,
+            type.serve_type_icon,
+            region_serve.city_code,
+            region_serve.id as serve_id,
+            item.id as serve_item_id,
+            item.name as serve_item_name,
+            item.serve_item_icon,
+            item.sort_num as serve_item_sort_num
+        FROM
+            region_serve
+                inner JOIN serve_item AS item ON item.id = region_serve.serve_item_id
+                inner JOIN serve_type AS type ON type.id = item.serve_type_id
+        WHERE
+            region_serve.region_id = #{regionId}
+          AND region_serve.sale_status = 2
+        ORDER BY
+            type.sort_num,
+            item.sort_num
+    </select>
+
+    <!--手动的映射-->
+    <resultMap id="ServeCategoryMap" type="com.cskaoyan.duolai.clean.housekeeping.dao.entity.ServeTypeHomeDO" autoMapping="true">
+        <!--id映射主键字段-->
+        <id column="serve_type_id" property="serveTypeId"></id>
+
+        <!--column 数据库中的字段名-->
+        <!--property 实体类中对应的属性 该关键字可以省略... -->
+        <!--ofType 是javaType中的单个对象类型-->
+        <collection property="serveResDTOList" ofType="com.cskaoyan.duolai.clean.housekeeping.dao.entity.HomeRegionServeSimpleDO" autoMapping="true">
+            <id column="serve_id" property="id"></id>
+        </collection>
+    </resultMap>
+
+
+    <select id="findServeDetailById" resultType="com.cskaoyan.duolai.clean.housekeeping.dao.entity.ServeDetailDO">
+        SELECT
+            region_serve.id,
+            region_serve.city_code,
+            region_serve.price,
+            region_serve.is_hot,
+            region_serve.hot_time_stamp,
+            region_serve.sale_status,
+            item.id AS serve_item_id,
+            item.`name` AS serve_item_name,
+            item.img AS serve_item_img,
+            item.detail_img,
+            item.serve_item_icon,
+            item.unit,
+            item.sort_num AS serve_item_sort_num,
+            item.serve_type_id AS serve_type_id,
+            type.`name` AS serve_type_name,
+            type.img AS serve_type_img,
+            type.serve_type_icon,
+            type.sort_num AS serve_type_sort_num
+        FROM
+            region_serve
+                inner JOIN serve_item AS item ON item.id = region_serve.serve_item_id
+                inner JOIN serve_type AS type ON type.id = item.serve_type_id
+        WHERE
+            region_serve.id = #{id}
+    </select>
+
+
+    <select id="findRegionServeDetail" resultType="com.cskaoyan.duolai.clean.housekeeping.dao.entity.RegionServeDetailDO">
+        SELECT
+            region_serve.id,
+            region_serve.city_code,
+            region_serve.price,
+            region_serve.region_id,
+            item.id AS serve_item_id,
+            item.`name` AS serve_item_name,
+            item.img AS serve_item_img,
+            item.detail_img,
+            item.unit
+        FROM
+            region_serve
+                inner JOIN serve_item AS item ON item.id = region_serve.serve_item_id
+        WHERE
+            region_serve.id = #{id} and region_serve.sale_status = 2
+    </select>
+
+    <select id="findRegionServeDetailByRegionId" resultType="com.cskaoyan.duolai.clean.housekeeping.dao.entity.RegionServeDetailDO">
+        SELECT
+            region_serve.id,
+            region_serve.region_id,
+            region_serve.city_code,
+            region_serve.region_id,
+            region_serve.price,
+            item.id AS serve_item_id,
+            item.`name` AS serve_item_name,
+            item.img AS serve_item_img,
+            item.detail_img,
+            item.unit
+        FROM
+            region_serve
+                inner JOIN serve_item AS item ON item.id = region_serve.serve_item_id
+        WHERE
+            region_serve.region_id = #{regionId} and region_serve.sale_status = 2
+    </select>
+
+
+</mapper>

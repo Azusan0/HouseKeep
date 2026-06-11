@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.cskaoyan.duolai.clean.redis.config.RedisConfiguration, \
+  com.cskaoyan.duolai.clean.redis.config.LockConfiguration, \
+  com.cskaoyan.duolai.clean.redis.config.SpringCacheConfig

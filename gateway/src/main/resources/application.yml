@@ -1,0 +1,20 @@
+server:
+  port: 11500  #端口
+spring:
+  profiles:
+    active: dev
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        #        server-addr: 110.42.253.116:8848
+        server-addr: 110.42.253.116:8848
+      config:
+        server-addr: 110.42.253.116:8848
+        #        server-addr: 110.42.253.116:8848
+        context-path: /nacos
+        file-extension: yml
+  config:
+    import:
+      - nacos:${spring.application.name}-${spring.profiles.active}.yml

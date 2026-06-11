@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>duolai-clean</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>framework</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>common</module>
+        <module>redis</module>
+        <module>mq</module>
+        <module>canal-sync</module>
+        <module>third-party</module>
+        <module>mvc</module>
+<!--        <module>xxl-job</module>-->
+        <module>mybatis-plus</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version>1.0-SNAPSHOT</version>
+        <seata-version>2.0.0</seata-version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>common</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>mvc</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>mysql</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>mq</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>redis</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>third-party</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>xxl-job</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>canal-sync</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>statemachine</artifactId>
+                <version>${version}</version>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+</project>
