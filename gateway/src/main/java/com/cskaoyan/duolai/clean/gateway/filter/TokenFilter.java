@@ -47,7 +47,7 @@ public class TokenFilter implements GlobalFilter {
         //2.当前请求是否需要登录才能访问
         if (applicationProperties.getAccessPathWhiteList().contains(path)) {
             //放行
-            chain.filter(exchange);
+           return chain.filter(exchange);
         }
         //3.验证登录身份
 

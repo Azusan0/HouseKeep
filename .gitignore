@@ -36,3 +36,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### 忽略 doc 文件 ###
+*.doc
+*.docx

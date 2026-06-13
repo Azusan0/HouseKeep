@@ -43,6 +43,6 @@ public class LoginServiceImpl implements ILoginService {
         }
         //3.生成用户JWT Token字符串 UserType.OPERATION为后台用户类型
         String token=jwtTool.createToken(operatorDO.getId(),operatorDO.getName(),operatorDO.getAvatar(), UserType.OPERATION);
-        return null;
+        return token;
     }
 }

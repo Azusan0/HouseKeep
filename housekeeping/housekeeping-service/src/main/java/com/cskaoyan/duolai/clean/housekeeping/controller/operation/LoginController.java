@@ -23,7 +23,6 @@ public class LoginController {
         String token=loginService.login(loginCommand);
         LoginDTO loginDTO=new LoginDTO();
         loginDTO.setToken(token);
-
         return loginDTO;
     }
 

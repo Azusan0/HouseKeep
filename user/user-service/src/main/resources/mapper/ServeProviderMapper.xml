@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.duolai.clean.user.dao.mapper.ServeProviderMapper">
+
+
+    <select id="queryWorkerList"
+            resultType="com.cskaoyan.duolai.clean.user.dao.entity.ServeProviderOperationDO">
+        SELECT
+        provider.id,
+        provider.`name`,
+        provider.phone,
+        certification.id_card_no as id_number,
+        setting.city_name,
+        setting.can_pick_up,
+        provider.`status`,
+        certification.certification_time
+        FROM
+        serve_provider AS provider
+        LEFT JOIN serve_provider_settings AS setting ON setting.id = provider.id
+        LEFT JOIN worker_certification AS certification ON certification.serve_provider_id = provider.id
+        <where>
+            certification.certification_status = 2
+            <if test="pageRequest.name !=null and pageRequest.name !=''">
+                AND provider.`name` LIKE concat('%',#{pageRequest.name},'%')
+            </if>
+            <if test="pageRequest.phone !=null and pageRequest.phone !=''">
+                AND provider.phone = #{pageRequest.phone}
+            </if>
+            <if test="pageRequest.status !=null">
+                AND provider.status = #{pageRequest.status}
+            </if>
+            <if test="pageRequest.canPickUp !=null">
+                AND setting.can_pick_up = #{pageRequest.canPickUp}
+            </if>
+        </where>
+        ORDER BY certification.certification_time desc
+    </select>
+
+    <select id="findBasicInformationById" resultMap="ServeProviderBasicInformationMap">
+        SELECT
+            provider.id,
+            provider.type,
+            provider.`name`,
+            provider.phone,
+            provider.`status`,
+            settings.can_pick_up,
+            settings.city_name,
+            settings.intention_scope,
+            skill.serve_type_name,
+            skill.serve_item_name
+        FROM
+            serve_provider AS provider
+                LEFT JOIN serve_provider_settings AS settings ON settings.id = provider.id
+                LEFT JOIN serve_skill AS skill ON skill.serve_provider_id = provider.id
+        WHERE
+            provider.id = #{id}
+    </select>
+
+    <!--手动的映射-->
+    <resultMap id="ServeProviderBasicInformationMap" type="com.cskaoyan.duolai.clean.user.dao.entity.ServeProviderAndSkillInfoDO">
+        <!--id映射主键字段-->
+        <id column="id" property="id"></id>
+        <!--result映射普通字段-->
+        <result column="type" property="type"></result>
+        <result column="name" property="name"></result>
+        <result column="phone" property="phone"></result>
+        <result column="status" property="status"></result>
+        <result column="can_pick_up" property="canPickUp"></result>
+        <result column="city_name" property="cityName"></result>
+        <result column="intention_scope" property="intentionScope"></result>
+        <result column="score" property="score"></result>
+
+        <!--column 数据库中的字段名-->
+        <!--property 实体类中对应的属性 该关键字可以省略... -->
+        <!--ofType 是javaType中的单个对象类型-->
+        <collection property="serveSkillSimpleList" ofType="com.cskaoyan.duolai.clean.user.dao.entity.ServeSkillSimpleDO">
+            <id column="serve_type_name" property="serveTypeName"></id>
+            <id column="serve_item_name" property="serveItemName"></id>
+        </collection>
+    </resultMap>
+</mapper>
